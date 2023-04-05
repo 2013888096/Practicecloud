@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
+import Menu from './Menu.vue';
 let router = useRouter();
 
 
@@ -17,7 +18,8 @@ const name = ref('Home')
   <div class="basic-layout">
     <el-container>
       <el-aside class="nav-side" width="200px">
-        Aside
+      
+        <Menu />
       </el-aside>
       <el-container>
         <el-header class="nav-top">

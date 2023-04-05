@@ -3,10 +3,10 @@
   import useGetGlobalProperties from '@/hooks/useGlobal'
   const _this = useGetGlobalProperties();
 
-  onMounted(() => {
-    _this.$storage.setItem('userInfo',{age:30,name:'codebyy'})
-    console.log('user=>',_this.$storage.getItem("userInfo"));
-  })
+  // onMounted(() => {
+  //   _this.$storage.setItem('userInfo',{age:30,name:'codebyy'})
+  //   console.log('user=>',_this.$storage.getItem("userInfo"));
+  // })
 </script>
 
 <template>
