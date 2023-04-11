@@ -5,6 +5,9 @@ import storage from '../utils/storage'
   state: () => ({
     userInfo:"" || storage.getItem("userInfo"),//获取用户信息
   }),
+  getters:{
+   
+  },
   actions:{
     saveUserInfo(userInfo){
       this.userInfo = userInfo;

@@ -7,7 +7,7 @@
         background-color="#001529"
         text-color="#fff"
         router
-        :collapse="false"
+        :collapse="isCollapse"
         class="nav-menu"
       >
         <el-sub-menu index="1">
@@ -31,18 +31,22 @@
   </el-row>
 </template>
 <script setup>
-import { ref } from 'vue'
-import {
-  Menu as IconMenu,
-  Promotion
-} from '@element-plus/icons-vue'
+  import { ref } from 'vue'
+  import {
+    Menu as IconMenu,
+    Promotion
+  } from '@element-plus/icons-vue'
 
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key, keyPath) => {
-  console.log(key, keyPath)
-}
+  defineProps({
+    isCollapse: Boolean,
+  })
+
+  const handleOpen = (key, keyPath) => {
+    console.log(key, keyPath)
+  }
+  const handleClose = (key, keyPath) => {
+    console.log(key, keyPath)
+  }
 </script>
 <style lang="scss">
   .menu_title{
