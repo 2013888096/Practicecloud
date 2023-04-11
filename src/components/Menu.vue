@@ -1,38 +1,31 @@
 <template>
   <el-row class="tac">
     <el-col :span="24">
-      <h5 class="mb-2 menu_title">Cloud</h5>
+      <!-- <h5 class="mb-2 menu_title">Cloud</h5> -->
       <el-menu
-        active-text-color="#ffd04b"
-        background-color="#001529"
-        class="el-menu-vertical-demo"
         default-active="2"
+        background-color="#001529"
         text-color="#fff"
-        @open="handleOpen"
-        @close="handleClose"
+        router
+        :collapse="false"
+        class="nav-menu"
       >
         <el-sub-menu index="1">
           <template #title>
-            <el-icon><location /></el-icon>
-            <span>Navigator One</span>
+            <el-icon><IconMenu /></el-icon>
+            <span>系统管理</span>
           </template>
-          <el-menu-item-group>
-            <el-menu-item index="1-1">item one</el-menu-item>
-            <el-menu-item index="1-2">item two</el-menu-item>
-          </el-menu-item-group>
+          <el-menu-item index="1-1">用户管理</el-menu-item>
+          <el-menu-item index="1-2">菜单管理</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="2">
-          <el-icon><icon-menu /></el-icon>
-          <span>Navigator Two</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <el-icon><document /></el-icon>
-          <span>Navigator Three</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <el-icon><setting /></el-icon>
-          <span>Navigator Four</span>
-        </el-menu-item>
+        <el-sub-menu index="2">
+          <template #title>
+            <el-icon><Promotion /></el-icon>
+            <span>审批管理</span>
+          </template>
+          <el-menu-item index="2-1">休假申请</el-menu-item>
+          <el-menu-item index="2-2">待我审批</el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-col>
   </el-row>
@@ -40,10 +33,8 @@
 <script setup>
 import { ref } from 'vue'
 import {
-  Document,
   Menu as IconMenu,
-  Location,
-  Setting,
+  Promotion
 } from '@element-plus/icons-vue'
 
 const handleOpen = (key, keyPath) => {

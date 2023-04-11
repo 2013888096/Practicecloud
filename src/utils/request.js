@@ -28,8 +28,14 @@ service.interceptors.response.use((res)=>{
   const { code,data,msg } = res.data;
   // debugger
   if(code == 200){
+    ElMessage({
+      showClose: true,
+      message: '登录成功,正在跳转..',
+      type: 'success',
+      duration:800
+    })
     return data;
-  }else if(code == 40001){
+  }else if(code == 50001){
     ElMessage.error(TOKEN_INVALID)
     setTimeout(()=>{
       router.push('/login')
