@@ -29,5 +29,12 @@ export default defineConfig({
         target:"http://localhost:3000"
       }
     }
+  }, 
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/assets/style/mixin.scss";'
+      }
+    }
   }
 })

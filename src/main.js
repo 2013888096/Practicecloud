@@ -10,6 +10,10 @@ import storage from './utils/storage'
 // api
 import api from './api'
 
+// iconfont
+import './assets/iconfont/iconfont.css';
+import './assets/iconfont/iconfont.js';
+
 const pinia = createPinia()
 
 const app = createApp(App)

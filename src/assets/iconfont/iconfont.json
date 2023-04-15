@@ -1,0 +1,23 @@
+{
+  "id": "4012580",
+  "name": "实习平台",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "校园实习资源共享平台",
+  "glyphs": [
+    {
+      "icon_id": "1206321",
+      "name": "menu",
+      "font_class": "menu",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "13519547",
+      "name": "s-promotion",
+      "font_class": "s-promotion",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    }
+  ]
+}

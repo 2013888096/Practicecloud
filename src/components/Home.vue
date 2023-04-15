@@ -10,7 +10,21 @@
 
         <!-- 导航菜单 -->
         <div class="nav-menu">
-          <Menu :isCollapse="isCollapse"/>
+          <el-row class="tac">
+              <el-col :span="24">
+                <!-- <h5 class="mb-2 menu_title">Cloud</h5> -->
+                <el-menu
+                  :default-active="activeMenu"
+                  background-color="#001529"
+                  text-color="#fff"
+                  router
+                  :collapse="isCollapse > 0 ? true:false"
+                  class="nav-menu"
+                >
+                  <TreeMenu :user-Menu="userMenu"/>
+                </el-menu>
+            </el-col>
+          </el-row>
         </div>     
       </el-aside>
       
@@ -18,15 +32,24 @@
         <el-header class="nav-top">
           <div class="nav-left">
             <div class="menu-flod" @click="toggle">
-              <el-icon><Fold /></el-icon>
+              <el-icon><Fold v-show="!isCollapse"/></el-icon>
+              <el-icon><Expand v-show="isCollapse"/></el-icon>
             </div>
-            <div class="bread">面包菜单</div>
+            <div class="bread">
+              <BreadCrumb/>
+            </div>
           </div>
           
           <div class="user-info">
-            <el-badge :is-dot="true" class="notice m-lr10" type="danger">
-              <el-icon><Bell /></el-icon>
+
+            <span class="fullScreen" @click="SetFullScreen">
+              <el-icon size="20"><FullScreen /></el-icon>
+            </span>
+
+            <el-badge :is-dot="noticeCount" class="notice m-lr10" type="danger">
+              <el-icon size="20"><Bell /></el-icon>
             </el-badge>
+            <span class="userName">Codebyy</span>
             <el-dropdown>
               <span class="el-dropdown-link">
                 <span class="el-avatar">
@@ -54,19 +77,66 @@
   </div>
 </template>
 <script setup>
-  import { ref } from 'vue'
+  import { ref ,onMounted,computed} from 'vue'
   import { useRouter } from 'vue-router';
-  import Menu from './Menu.vue';
+  import screenfull from 'screenfull'
+
+  // 全局
+  import useGetGlobalProperties from '@/hooks/useGlobal'
 
   import {
     Fold,
-    Bell
+    Bell,
+    Expand,
+    FullScreen
   } from '@element-plus/icons-vue'
   import useInfoStore from '@/store/infoStore'
+  //组件导入
+  import TreeMenu from './TreeMenu.vue';
+  import BreadCrumb from './BreadCrumb.vue';
+
   const infoStore = useInfoStore()
   let router = useRouter();
+  //全局
+  const _this = useGetGlobalProperties();
 
   const isCollapse = ref(false);
+  const noticeCount = ref(0);
+  const userMenu = ref([]);
+  
+
+  const userInfo = computed(()=>{
+    return infoStore.userInfo
+  })
+
+  const activeMenu = computed(()=>{
+    return location.hash.slice(1)
+  })
+  onMounted(() => {
+    getNoticeCount();
+    getMenuList();
+  })
+
+  //消息提示
+  const getNoticeCount = async()=>{
+    try {
+      const count = await _this.$api.noticeCount()
+      noticeCount.value = count
+    } catch (error) {
+      console.error(error)
+    }
+    
+  }
+  //菜单列表获取
+  const getMenuList = async()=>{
+    try {
+      const list = await _this.$api.getMenuList()
+      userMenu.value = list
+    } catch (error) {
+      console.error(error)
+    }
+    
+  }
 
   // 菜单收缩
   const toggle = ()=>{
@@ -74,8 +144,18 @@
     isCollapse.value = !isCollapse.value;
     console.log('toggle事件');
   }
+  // 全屏方案
+  const SetFullScreen = () => {
 
+    //screenfull.isEnabled  此方法返回布尔值，判断当前能不能进入全
+    if (!screenfull.isEnabled) {
+        return false
+    }
+    //screenfull.toggle 此方法是执行全屏化操作。如果已是全屏状态，则退出全屏
+    screenfull.toggle()
 
+    }
+  // 退出登录 
   const logout = ()=>{
     router.push("/login")
     // 清空
@@ -115,6 +195,7 @@
       height: calc(100vh - 50px);
       border-right: none;
     }
+    
     // 合并
     &.fold{
       width: 64px;
@@ -124,73 +205,80 @@
       width: 200px;
     }
   }
-  
-  
-}
-.content-right{
-  transition: width .5s;
-  // 合并
-  &.fold{
-    margin-left: 64px;
-  }
-  // 展开
-  &.unfold{
-    margin-left: 200px;
-  }
-  .nav-top{
-    height: 50px;
-    line-height: 50px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ddd;
-    background: #fff;
-    padding: 0 20px;
-
-    .nav-left{
+  .content-right{
+    // 合并
+    &.fold{
+      margin-left: 64px;
+    }
+    // 展开
+    &.unfold{
+      margin-left: 200px;
+    }
+    transition: width .5s;
+    .nav-top{
+      height: 50px;
+      line-height: 50px;
       display: flex;
-      align-items: center;
-      .menu-flod{
-        padding-top: 7px;
-        margin-right: 15px;
-        font-size: 18px;
-      }
-      .menu-flod:hover{
-        cursor: pointer;
-      }
-    }
-    .user-info{
-      padding-top: 5px;
-      .notice{
-        line-height: 30px;
-      }
-      .el-avatar{
-        border-radius: 50%;
-      }
-      .el-avatar>img{
-        width: 40px;
-        height: 40px;
-      }
-      .el-avatar:hover{
-        cursor: pointer;
-      }
-    }
-  }
-  .wrapper{
-//  // 合并
-//   &.fold{
-//     width: 64px;
-//   }
-//   // 展开
-//   &.unfold{
-//     width: 200px;
-//   }
-    background: #eef0f3;
-    height: calc(100vh - 50px);
-    .main-page{
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
       background: #fff;
-      height: calc(100vh - 100px);
+      padding: 0 20px;
+
+      .nav-left{
+        display: flex;
+        align-items: center;
+        .menu-flod{
+          padding-top: 7px;
+          margin-right: 15px;
+          font-size: 18px;
+        }
+        .menu-flod:hover{
+          cursor: pointer;
+        }
+      }
+      .user-info{
+        padding-top: 5px;
+        font-size: 14px;
+        color: #000000d9;
+        .notice{
+          line-height: 30px;
+          &:hover{
+            cursor: pointer;
+          }
+        }
+        .el-avatar{
+          border: none;
+          border-radius: 50%;
+        }
+        .el-avatar>img{
+          width: 40px;
+          height: 40px;
+        }
+        .el-avatar:hover{
+          cursor: pointer;
+        }
+        .el-dropdown-link{
+          outline: none;
+        }
+        .fullScreen:hover{
+          cursor: pointer;
+        }
+
+        .userName{
+          margin: 0 10px;
+        }
+      }
+    }
+    .wrapper{
+      background: #eef0f3;
+      height: calc(100vh - 50px);
+      .main-page{
+        background: #fff;
+        height: calc(100vh - 100px);
+      }
     }
   }
 }
+
 
 </style>
